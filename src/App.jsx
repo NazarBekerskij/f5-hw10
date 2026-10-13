@@ -1,6 +1,7 @@
 import './App.css'
 import { Component } from 'react'
 
+
 class App extends Component {
   state = {
     name: "",
@@ -9,35 +10,47 @@ class App extends Component {
     contacts: [],
   }
 
-  handleNameValue = (e) => {
-    this.setState({
-      name: e.target.value
-    })
-  }
+  // handleNameValue = (e) => {
+  //   this.setState({
+  //     name: e.target.value
+  //   })
+  // }
 
-   handleSecondNameValue = (e) => {
-    this.setState({
-      secondName: e.target.value
-    })
-  }
+  
+  // handleSecondNameValue = (e) => {
+  //   this.setState({
+  //     secondName: e.target.value
+  //   })
+  // }
 
-    handleEmailValue = (e) => {
+  
+  // handleEmailValue = (e) => {
+  //   this.setState({
+  //     email: e.target.value
+  //   })
+  // }
+
+
+  handleChange = (e) => {
+    const {name, value} = e.target
+    
     this.setState({
-      email: e.target.value
+      [name]: value
     })
   }
 
   handleAddContacts = () => {
     if(this.state.name.trim() === "")return;
 
-    const newContacts = {
-      name: this.state.name,
-      secondName: this.state.secondName,
-      email: this.state.email,
+    const newContact = {
+       name: this.state.name,
+       secondName: this.state.secondName,
+       email: this.state.email,
     }
 
-    this.setState((prveState) => ({
-      contacts: [...prveState.contacts, newContacts],
+
+    this.setState((prevState) => ({
+      contacts: [...prevState.contacts, newContact],
       name: "",
       secondName: "",
       email: "",
@@ -47,25 +60,20 @@ class App extends Component {
   render(){
     return(
       <>
-      <div>
-        <input type="text" value={this.state.name} onChange={this.handleNameValue} placeholder='ведіть ваше імя' />
-        <input type="text" value={this.state.secondName} onChange={this.handleSecondNameValue} placeholder='ведіть ваше прізвище'/>
-        <input type="email" value={this.state.email} onChange={this.handleEmailValue} placeholder='ведіть вашу пошту'/>
-      </div>
+      <form>
+        <input type="text" name='name' onChange={this.handleChange} value={this.state.name} placeholder='ведіть ваше імя'/>
+        <input type="text" name='secondName' onChange={this.handleChange} value={this.state.secondName}placeholder='ведіть ваше прізвище'/>
+        <input type="email" name='email' onChange={this.handleChange} value={this.state.email}placeholder='ведіть вашу пошту'/>
+   
 
-      <div>
-        <button onClick={this.handleAddContacts} type='button'>відправити</button>
-      </div>
+     
+        <button onClick={this.handleAddContacts} type='button'>добавити</button>
+         </form>
 
-      <h3>список:</h3>
+      <h3>контакти:</h3>
 
-
-      <ul>{this.state.contacts.map((contactc, id) => (
-        <li key={id}>
-          <p>{contactc.name}</p>        
-          <p>{contactc.secondName}</p>   
-          <p>{contactc.email}</p>   
-        </li>
+      <ul>{this.state.contacts.map((contact, id) => (
+        <li key={id}>{contact.name} {contact.secondName} {contact.email}</li>
       ))}</ul>
       </>
     )
@@ -73,4 +81,4 @@ class App extends Component {
 }
 
 
-export default App
+export default App 
