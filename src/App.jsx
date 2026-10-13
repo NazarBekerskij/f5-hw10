@@ -1,5 +1,7 @@
 import './App.css'
 import { Component } from 'react'
+import { ContactForm } from './components/ContactForm/ContactForm'
+import { ContactList } from './components/ContactList/ContactList'
 
 
 class App extends Component {
@@ -10,25 +12,7 @@ class App extends Component {
     contacts: [],
   }
 
-  // handleNameValue = (e) => {
-  //   this.setState({
-  //     name: e.target.value
-  //   })
-  // }
 
-  
-  // handleSecondNameValue = (e) => {
-  //   this.setState({
-  //     secondName: e.target.value
-  //   })
-  // }
-
-  
-  // handleEmailValue = (e) => {
-  //   this.setState({
-  //     email: e.target.value
-  //   })
-  // }
 
 
   handleChange = (e) => {
@@ -60,21 +44,18 @@ class App extends Component {
   render(){
     return(
       <>
-      <form>
-        <input type="text" name='name' onChange={this.handleChange} value={this.state.name} placeholder='ведіть ваше імя'/>
-        <input type="text" name='secondName' onChange={this.handleChange} value={this.state.secondName}placeholder='ведіть ваше прізвище'/>
-        <input type="email" name='email' onChange={this.handleChange} value={this.state.email}placeholder='ведіть вашу пошту'/>
-   
+      <ContactForm
+      name={this.state.name}
+      secondName={this.state.secondName}
+      email={this.state.email}
+      handleChange={this.handleChange}
+      handleAddContacts={this.handleAddContacts}
+      />
 
-     
-        <button onClick={this.handleAddContacts} type='button'>добавити</button>
-         </form>
 
-      <h3>контакти:</h3>
-
-      <ul>{this.state.contacts.map((contact, id) => (
-        <li key={id}>{contact.name} {contact.secondName} {contact.email}</li>
-      ))}</ul>
+      <ContactList
+      contacts={this.state.contacts}
+      />
       </>
     )
   }
