@@ -1,63 +1,59 @@
-import './App.css'
-import { Component } from 'react'
-import { ContactForm } from './components/ContactForm/ContactForm'
-import { ContactList } from './components/ContactsList/ContactsList'
+import "./App.css";
+import { Component } from "react";
+import initialTodos from "./todo.json";
+import TodoList from "./components/TodoList/TodoList";
+import Info from "./components/Info/Info";
+import TodoEditor from "./components/TodoEditor/TodoEditor";
+import { nanoid } from "nanoid";
+import Fillter from "./components/Filter/Filter";
 
-class App extends Component{
+class App extends Component {
   state = {
-    contacts: [],
-    name: "",
-    nubmer: "",
-  }
+    todos: initialTodos,
+    filter: "",
+  };
 
-  handleChange = (e) => {
-    const { name, value } = e.target
-    this.setState({
-      [name]: value
-    })
-  }
-
-
-  handleAddContact = (e) => {
-    e.preventDefault();
-    const { name, number } = this.state;
-
-    if (name.trim() === '' || number.trim() === '') return;
-
-    const newContact = {
-      id: crypto.randomUUID(), 
-      name,
-      number,
-    };
-
-    this.setState((prevState) => ({
-      contacts: [...prevState.contacts, newContact],
-      name: '',
-      number: '',
+  handleDelete = (id) => {
+    this.setState((prev) => ({
+      todos: prev.todos.filter((todo) => todo.id !== id),
     }));
-  }
+  };
 
+  handleAppSubmit = (text) => {
+    const data = {
+      id: nanoid,
+      text: text,
+      completed: false,
+    };
+    this.setState((prev) => ({
+      todos: [...prev.todos, data],
+    }));
+  };
 
-  render(){
-    const {name, number, contacts} = this.state
-    return(
+  handleFilter = (text) => {
+    this.setState({
+      filter: text,
+    });
+  };
+
+  render() {
+    const { todos, filter } = this.state;
+    const filteredTodo = todos.filter((todo) =>
+      todo.text.toLowerCase().includes(filter.toLowerCase()),
+    );
+    const count = todos.length;
+
+    const done = todos.filter((todo) => todo.completed).length;
+
+    return (
       <>
-      <div>
-        <h1>Phonebook</h1>
-        <ContactForm
-        name={name}
-        numbeer={number}
-        handleChange={this.handleChange}
-        onSubmit={this.handleAddContact}
-        />
-
-        <h2>Contacts</h2>
-        <ContactList contacts={contacts} />
-      </div>
+        <Info count={count} done={done} />
+        <TodoEditor onForm={this.handleAppSubmit} />
+        <Fillter onFilter={this.handleFilter} />
+        <TodoList todos={filteredTodo} onDelete={this.handleDelete} />
       </>
-    )
+    );
   }
 }
 
-
-export default App
+export default App;
