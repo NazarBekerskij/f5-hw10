@@ -3,11 +3,9 @@ import { Component } from "react";
 
 class Info extends Component {
     render(){
-        const {count, done} = this.props
         return(
             <>
-            <p>Кількість завдань: {count}</p>
-            <p>Виконано: {done}</p>
+           
             </>
         )
     }
