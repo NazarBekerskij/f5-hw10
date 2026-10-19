@@ -19,52 +19,59 @@ class App extends Component {
 }
 
 handleChange = (e) => {
-  const {name, value} = e.target
+  const {name, value} = e.target 
 
-  this.setState({[name]: value})
-}
-
-handleSubmit = (e) => {
-  e.preventDefault()
-
-
-  const  {name, number, contacts} = this.state
-
-  if(name.trim() === "" || number.trim() === ""){return;}
-
-  const newContact = {
-    id: nanoid(),
-    name,
-    number,
-  }
-
-  this.setState((prevState) => ({
-    contacts: [...prevState.contacts, newContact],
-    name: "",
-    number: "",
-  }))
-}
+  this.setState({
+    [name]: value,
+  })
+} 
  
   
-  
-handleFilterChange = e => {
-    this.setState({ filter: e.target.value });
-  };
+handleSubmit = (e) => {
+e.preventDefault()
 
-  getFilteredContacts = () => {
-    const { contacts, filter } = this.state;
-    const normalizedFilter = filter.toLowerCase();
+const {name, number} = this.state 
 
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
+if(name.trim() === "" || number.trim() === ""){
+  return;
+}
 
-  handleDeleteContact = (contactId) => {
-    this.setState((prevState) => ({
-        contacts: prevState.contacts.filter(contact => contact.id !== contactId)
-    }))
-  }
+const newContact = {
+  id: nanoid(),
+  name,
+  number,
+}
+
+this.setState((prevState) => ({
+  contacts: [...prevState.contacts, newContact],
+  name: "",
+  number: "",
+}))
+}
+
+
+handleFilterChange = (e) => {
+  this.setState({
+    filter: e.target.value,
+  })
+}
+
+getFilteredContacts = () => {
+  const {contacts, filter} = this.state
+  const normalizedFilter = filter.toLocaleLowerCase()
+
+  return contacts.filter((contact) => contact.name.toLocaleLowerCase().includes(normalizedFilter))
+}
+
+
+deleteContact = (contactId) => {
+  this.setState((prevState) => ({
+    contacts: prevState.contacts.filter((contact) => contact.id !== contactId)
+  }))
+}
+
+
+
 
   render() {
     
@@ -72,21 +79,24 @@ handleFilterChange = e => {
 
     return (
       <>
-    <Title/>
-    <Form
-    onSubmit={this.handleSubmit}
-    onChange={this.handleChange}
-    name={this.state.name}
-    number={this.state.number}
-    />
+      <Title/>
+      <Form
+      name={this.state.name}
+      number={this.state.number}
+      onChange={this.handleChange}
+      onSubmit={this.handleSubmit}
+      />
 
       <h2>Contacts</h2>
-      <Filter 
+        <Filter
       value={this.state.filter}
       onChange={this.handleFilterChange}
       />
 
-    <Contacts contacts={filteredContacts}/>
+      <Contacts 
+      contacts={filteredContacts}
+      onDelete={this.deleteContact}
+      />
       </>
     );
   }
