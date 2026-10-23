@@ -18,6 +18,24 @@ class App extends Component {
   filter: "",
 }
 
+componentDidMount(){
+  const savedContacts = window.localStorage.getItem("contacts")
+
+  if(savedContacts){
+    this.setState({
+      contacts: JSON.parse(savedContacts)
+    })
+  }
+}
+
+componentDidUpdate(_, prev){
+  if(prev.contacts !== this.state.contacts){
+    window.localStorage.setItem("contacts", JSON.stringify(this.state.contacts))
+  }
+}
+
+
+
 handleChange = (e) => {
   const {name, value} = e.target 
 
@@ -25,8 +43,7 @@ handleChange = (e) => {
     [name]: value,
   })
 } 
- 
-  
+   
 handleSubmit = (e) => {
 e.preventDefault()
 
@@ -49,7 +66,6 @@ this.setState((prevState) => ({
 }))
 }
 
-
 handleFilterChange = (e) => {
   this.setState({
     filter: e.target.value,
@@ -63,15 +79,11 @@ getFilteredContacts = () => {
   return contacts.filter((contact) => contact.name.toLocaleLowerCase().includes(normalizedFilter))
 }
 
-
 deleteContact = (contactId) => {
   this.setState((prevState) => ({
     contacts: prevState.contacts.filter((contact) => contact.id !== contactId)
   }))
 }
-
-
-
 
   render() {
     
